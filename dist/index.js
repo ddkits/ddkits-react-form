@@ -9,5 +9,5 @@ Object.defineProperty(exports, "Form", {
     return _Form.default;
   }
 });
-var _Form = _interopRequireDefault(require("./form/Form"));
+var _Form = _interopRequireDefault(require("./components/form/Form"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

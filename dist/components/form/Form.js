@@ -37,7 +37,7 @@ const fieldMeetsCondition = values => field => {
  */
 function Form(props) {
   // state to track the current page ID of the form
-  const [message, setmessage] = (0, _react.useState)('');
+  const [message, setmessage] = (0, _react.useState)("");
   const [error, setError] = (0, _react.useState)(false);
   const [page, setPage] = (0, _react.useState)(0);
   const [loading, setLoading] = (0, _react.useState)(true);
@@ -77,7 +77,7 @@ function Form(props) {
   // callback provided to components to update the main list of form values
   const fieldChanged = (fieldId, value) => {
     setError(false);
-    setmessage('');
+    setmessage("");
     // use a callback to find the field in the value list and update it
     setValues(currentValues => {
       currentValues[fieldId] = value;
@@ -126,7 +126,7 @@ function Form(props) {
         setPage(findNextPage(page));
       } else {
         setError(false);
-        setmessage('');
+        setmessage("");
         setPage(findNextPage(direction === "next" ? page + 1 : page - 1));
       }
     });
@@ -142,7 +142,7 @@ function Form(props) {
   };
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "col-md-12 services animate-box fadeInDown animated"
-  }, message !== '' && /*#__PURE__*/_react.default.createElement("div", {
+  }, message !== "" && /*#__PURE__*/_react.default.createElement("div", {
     className: "alert alert-danger alert-dismissible dismissible animate-box fadeInDown animated",
     dangerouslySetInnerHTML: {
       __html: message
@@ -189,6 +189,5 @@ function Form(props) {
     onClick: nextPage
   }, "Next"), !error && page === formData.length - 1 && /*#__PURE__*/_react.default.createElement("button", {
     onClick: () => onSubmit(values)
-  }, props.btntext ? props.btntext : 'Submit')));
+  }, props.btntext ? props.btntext : "Submit")));
 }
-;
