@@ -1,5 +1,5 @@
 import "./App.css";
-import { Form } from "./lib/components";
+import { Form } from "./lib";
 import { useCallback, useState } from "react";
 
 function App() {
