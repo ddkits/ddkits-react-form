@@ -8,6 +8,13 @@ require("core-js/modules/web.dom-collections.iterator.js");
 var _react = _interopRequireDefault(require("react"));
 var _Field = _interopRequireDefault(require("./Field"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/**
+ * FieldGroup
+ * @param {object} field
+ * @param {function} fieldChanged
+ * @param {string} value 
+ * @returns 
+ */
 const FieldGroup = _ref => {
   let {
     field,

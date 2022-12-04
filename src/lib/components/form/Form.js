@@ -23,10 +23,10 @@ const fieldMeetsCondition = (values) => (field) => {
  * formData, thisAction
  * @returns object of values
  */
-export default function Form(props){
+export default function Form(props) {
   // state to track the current page ID of the form
-  const [message, setmessage] = useState('')
-  const [error, setError] = useState(false)
+  const [message, setmessage] = useState("");
+  const [error, setError] = useState(false);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const { formData, thisAction } = props;
@@ -38,7 +38,7 @@ export default function Form(props){
 
   // this effect will run when the `page` changes
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const upcomingPageData = formData[page];
     setCurrentPageData(upcomingPageData);
     setValues((currentValues) => {
@@ -54,18 +54,17 @@ export default function Form(props){
         return obj;
       }, {});
       setTimeout(() => {
-        setLoading(false)
+        setLoading(false);
       }, 1000);
 
       return Object.assign({}, newValues, currentValues);
-
     });
   }, [page, formData]);
 
   // callback provided to components to update the main list of form values
   const fieldChanged = (fieldId, value) => {
     setError(false);
-    setmessage('');
+    setmessage("");
     // use a callback to find the field in the value list and update it
     setValues((currentValues) => {
       currentValues[fieldId] = value;
@@ -78,60 +77,58 @@ export default function Form(props){
     });
   };
 
-  const validateFields = async () =>{
+  const validateFields = async () => {
     // validate required fields
     let failed = [];
     let fields = currentPageData.fields;
     await fields.forEach((x, xds) => {
-        if (x.required && !values[x.name]) {
-            failed[xds] = `${x.name} is required`
-            setError(true)
-            return false;
-        }
-    })
-    return failed;
-  }
-  const navigatePages = (direction) => async() => {
-    const findNextPage = (page) => {
-        const upcomingPageData = formData[page];
-        if (upcomingPageData.conditional && upcomingPageData.conditional.field) {
-            // we're going to a conditional page, make sure it's the right one
-            const segments = upcomingPageData.conditional.field.split("_");
-            const fieldId = segments[segments.length - 1];
-
-            const fieldToMatchValue = values[fieldId];
-
-            if (fieldToMatchValue !== upcomingPageData.conditional.value) {
-            // if we didn't find a match, try the next page
-            return findNextPage(direction === "next" ? page + 1 : page - 1);
-            }
-        }
-        // all tests for the page we want to go to pass, so go to it
-        return page;
-        };
-    await validateFields().then((x) => {
-        console.log(x)
-        if (x.length > 0) {
-            setError(true)
-            setmessage(x.join("<br/>"))
-            setPage(findNextPage(page));
-        }else{
-            setError(false)
-            setmessage('')
-
-
-                setPage(findNextPage(direction === "next" ? page + 1 : page - 1));
-        }
+      if (x.required && !values[x.name]) {
+        failed[xds] = `${x.name} is required`;
+        setError(true);
+        return false;
+      }
     });
+    return failed;
+  };
+  const navigatePages = (direction) => async () => {
+    const findNextPage = (page) => {
+      const upcomingPageData = formData[page];
+      if (upcomingPageData.conditional && upcomingPageData.conditional.field) {
+        // we're going to a conditional page, make sure it's the right one
+        const segments = upcomingPageData.conditional.field.split("_");
+        const fieldId = segments[segments.length - 1];
 
+        const fieldToMatchValue = values[fieldId];
+
+        if (fieldToMatchValue !== upcomingPageData.conditional.value) {
+          // if we didn't find a match, try the next page
+          return findNextPage(direction === "next" ? page + 1 : page - 1);
+        }
+      }
+      // all tests for the page we want to go to pass, so go to it
+      return page;
+    };
+    await validateFields().then((x) => {
+      console.log(x);
+      if (x.length > 0) {
+        setError(true);
+        setmessage(x.join("<br/>"));
+        setPage(findNextPage(page));
+      } else {
+        setError(false);
+        setmessage("");
+
+        setPage(findNextPage(direction === "next" ? page + 1 : page - 1));
+      }
+    });
   };
 
   const nextPage = navigatePages("next");
   const prevPage = navigatePages("prev");
 
   const onSubmit = (values) => {
-        thisAction(values);
-        setPage(0);
+    thisAction(values);
+    setPage(0);
   };
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -139,54 +136,76 @@ export default function Form(props){
 
   return (
     <div className="col-md-12 services animate-box fadeInDown animated">
-    {message !== '' && <div className="alert alert-danger alert-dismissible dismissible animate-box fadeInDown animated" dangerouslySetInnerHTML={{
-        __html: message
-}} />}
-    <form className="form-group col-md-12" onSubmit={onSubmitForm}>
-      <h3>{currentPageData.label}</h3>
-      {loading ? <Loading /> : currentPageData.fields
-        .filter(fieldMeetsCondition(values))
-        .map((field, xds) => {
-          switch (field.component) {
-            case "field_group":
-              return (
-                <div key={xds} className="col-md-12 animate-box fadeInDown animated">
-                <FieldGroup
-                  field={field}
-                  className="form-control col-md-12"
-                  fieldChanged={fieldChanged}
-                  values={values}
-                />
-                </div>
-              );
-            case "options":
-              return (
-                <div key={xds} className="col-md-12 animate-box fadeInDown animated">
-                <Option
-                  field={field}
-                  className="form-control col-md-12"
-                  fieldChanged={fieldChanged}
-                  value={values[field.name]}
-                />
-                </div>
-              );
-            default:
-              return (
-                <div key={xds} className="col-md-12 animate-box fadeInDown animated">
-                <Field
-                  field={field}
-                  className="form-control col-md-12"
-                  fieldChanged={fieldChanged}
-                  value={values[field.name]}
-                />
-                </div>
-              );
-          }
-        })}
-      {page > 0  && <button onClick={prevPage}>Back</button>}&nbsp;
-      {page < formData.length - 1 && <button onClick={nextPage}>Next</button>}
-      {(!error && page === formData.length - 1) && <button onClick={() => onSubmit(values)} >{props.btntext ? props.btntext : 'Submit'}</button>}
-    </form>
+      {message !== "" && (
+        <div
+          className="alert alert-danger alert-dismissible dismissible animate-box fadeInDown animated"
+          dangerouslySetInnerHTML={{
+            __html: message,
+          }}
+        />
+      )}
+      <form className="form-group col-md-12" onSubmit={onSubmitForm}>
+        <h3>{currentPageData.label}</h3>
+        {loading ? (
+          <Loading />
+        ) : (
+          currentPageData.fields
+            .filter(fieldMeetsCondition(values))
+            .map((field, xds) => {
+              switch (field.component) {
+                case "field_group":
+                  return (
+                    <div
+                      key={xds}
+                      className="col-md-12 animate-box fadeInDown animated"
+                    >
+                      <FieldGroup
+                        field={field}
+                        className="form-control col-md-12"
+                        fieldChanged={fieldChanged}
+                        values={values}
+                      />
+                    </div>
+                  );
+                case "options":
+                  return (
+                    <div
+                      key={xds}
+                      className="col-md-12 animate-box fadeInDown animated"
+                    >
+                      <Option
+                        field={field}
+                        className="form-control col-md-12"
+                        fieldChanged={fieldChanged}
+                        value={values[field.name]}
+                      />
+                    </div>
+                  );
+                default:
+                  return (
+                    <div
+                      key={xds}
+                      className="col-md-12 animate-box fadeInDown animated"
+                    >
+                      <Field
+                        field={field}
+                        className="form-control col-md-12"
+                        fieldChanged={fieldChanged}
+                        value={values[field.name]}
+                      />
+                    </div>
+                  );
+              }
+            })
+        )}
+        {page > 0 && <button onClick={prevPage}>Back</button>}&nbsp;
+        {page < formData.length - 1 && <button onClick={nextPage}>Next</button>}
+        {!error && page === formData.length - 1 && (
+          <button onClick={() => onSubmit(values)}>
+            {props.btntext ? props.btntext : "Submit"}
+          </button>
+        )}
+      </form>
     </div>
   );
-};
+}

@@ -1,6 +1,6 @@
 {
   "name": "ddkits-react-form",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Sam Ayoub <sam@ddkits.com>",
   "description": "DDKits React Form is a custom fully component to build a dynamic fully functional form, with required, pagination and fields validation, all in one. Easy use by JSON or an object to pass. free of bugs.",
   "keywords": [
@@ -14,7 +14,7 @@
     "submission",
     "free"
   ],
-  "private": true,
+  "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
   "repository": {
@@ -60,6 +60,7 @@
     "web-vitals": "^2.1.4"
   },
   "dependencies": {
+    "ddkits-react-form": "^0.1.0",
     "react-spinners": "^0.13.7"
   }
 }
