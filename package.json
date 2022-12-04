@@ -60,7 +60,6 @@
     "web-vitals": "^2.1.4"
   },
   "dependencies": {
-    "ddkits-react-form": "^0.1.0",
     "react-spinners": "^0.13.7"
   }
 }
