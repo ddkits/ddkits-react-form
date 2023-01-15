@@ -1,6 +1,6 @@
 {
   "name": "ddkits-react-form",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "author": "Sam Ayoub <sam@ddkits.com>",
   "license" : "MIT",
   "description": "DDKits React Form, powered by www.reallexi.com, is a custom fully component to build a dynamic fully functional form, with required, pagination and fields validation, all in one. Easy use by JSON or an object to pass. free of bugs.",
