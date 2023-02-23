@@ -1,70 +1,60 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-/**
- * Field
- * @param {object} field
- * @param {function} fieldChanged
- * @param {string} type
- * @param {string} value 
- * @returns 
- */
-export default function Field({ field, fieldChanged, type, value }) {
+export default function Field(props) {
+  const { field, fieldChanged, type, value } = props;
   const [result, setresult] = useState("");
-  const typeNow = field.type;
   useEffect(() => {
-    switch (typeNow) {
-      case "text":
-        setresult(
-          <input
-            type={type || field.component}
-            id={field.name}
-            name={field.name}
-            key={field.name}
-            className="form-control col-md-12"
-            defaultValue={value}
-            required={field.required || false}
-            onChange={(e) => {
-              // Notify the main state list of the new value
-              fieldChanged(field.name, e.target.value);
-            }}
-          />
-        );
-        break;
-      case "textarea":
-        setresult(
-          <textarea
-            id={field.name}
-            name={field.name}
-            key={field.name}
-            type={type || field.component}
-            className="form-control col-md-12"
-            defaultValue={value || ""}
-            required={field.required || false}
-            onChange={(e) => {
-              // Notify the main state list of the new value
-              fieldChanged(field.name, e.target.value);
-            }}
-          />
-        );
-        break;
+    switch (type) {
+    case "text":
+      setresult(
+        <input
+          type={type}
+          id={field.name}
+          name={field.name}
+          className="form-control col-md-12"
+          defaultValue={value}
+          required={field.required || false}
+          onChange={(e) => {
+            // Notify the main state list of the new value
+            fieldChanged(field.name, e.target.value);
+          }}
+        />
+      );
+      break;
+    case "textarea":
+      setresult(
+        <textarea
+          id={field.name}
+          name={field.name}
+          type={type}
+          className="form-control col-md-12"
+          defaultValue={value || ""}
+          required={field.required || false}
+          onChange={(e) => {
+            // Notify the main state list of the new value
+            fieldChanged(field.name, e.target.value);
+          }}
+        />
+      );
+      break;
 
-      default:
-        setresult(
-          <input
-            type={type || field.component}
-            id={field.name}
-            key={field.name}
-            name={field.name}
-            className="form-control col-md-12"
-            defaultValue={value}
-            required={field.required || false}
-            onChange={(e) => {
-              // Notify the main state list of the new value
-              fieldChanged(field.name, e.target.value);
-            }}
-          />
-        );
-        break;
+    default:
+      setresult(
+        <input
+          type={type}
+          id={field.name}
+          name={field.name}
+          className="form-control col-md-12"
+          defaultValue={value}
+          required={field.required || false}
+          onChange={(e) => {
+            // Notify the main state list of the new value
+            fieldChanged(field.name, e.target.value);
+          }}
+        />
+      );
+      break;
     }
   }, []);
 
@@ -79,3 +69,10 @@ export default function Field({ field, fieldChanged, type, value }) {
     </div>
   );
 }
+
+Field.PropTypes = {
+  field: PropTypes.object,
+  fieldChanged: PropTypes.func,
+  type: PropTypes.string,
+  value: PropTypes.any,
+};

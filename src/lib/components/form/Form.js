@@ -3,7 +3,8 @@ import FieldGroup from "./FieldGroup";
 import Field from "./Field";
 import Option from "./Option";
 import Loading from "./Loading";
-
+import PropTypes from "prop-types";
+import List from "./List";
 /**
  * custom fieldMeetsCondition from object used by form for conditional use
  * @param {object} values
@@ -53,10 +54,7 @@ export default function Form(props) {
 
         return obj;
       }, {});
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-
+      setLoading(false);
       return Object.assign({}, newValues, currentValues);
     });
   }, [page, formData]);
@@ -109,7 +107,6 @@ export default function Form(props) {
       return page;
     };
     await validateFields().then((x) => {
-      console.log(x);
       if (x.length > 0) {
         setError(true);
         setmessage(x.join("<br/>"));
@@ -117,8 +114,11 @@ export default function Form(props) {
       } else {
         setError(false);
         setmessage("");
-
+        setLoading(true);
         setPage(findNextPage(direction === "next" ? page + 1 : page - 1));
+        setTimeout(() => {
+          setLoading(false);
+        }, 100);
       }
     });
   };
@@ -135,10 +135,10 @@ export default function Form(props) {
   };
 
   return (
-    <div className="col-md-12 services animate-box fadeInDown animated">
+    <div className="col-md-12 services  fadeInDown animated">
       {message !== "" && (
         <div
-          className="alert alert-danger alert-dismissible dismissible animate-box fadeInDown animated"
+          className="alert alert-danger alert-dismissible dismissible  fadeInDown animated"
           dangerouslySetInnerHTML={{
             __html: message,
           }}
@@ -147,54 +147,61 @@ export default function Form(props) {
       <form className="form-group col-md-12" onSubmit={onSubmitForm}>
         <h3>{currentPageData.label}</h3>
         {loading ? (
-          <Loading />
+          <Loading width="100%" />
         ) : (
           currentPageData.fields
             .filter(fieldMeetsCondition(values))
             .map((field, xds) => {
               switch (field.component) {
-                case "field_group":
-                  return (
-                    <div
-                      key={xds}
-                      className="col-md-12 animate-box fadeInDown animated"
-                    >
-                      <FieldGroup
-                        field={field}
-                        className="form-control col-md-12"
-                        fieldChanged={fieldChanged}
-                        values={values}
-                      />
-                    </div>
-                  );
-                case "options":
-                  return (
-                    <div
-                      key={xds}
-                      className="col-md-12 animate-box fadeInDown animated"
-                    >
-                      <Option
-                        field={field}
-                        className="form-control col-md-12"
-                        fieldChanged={fieldChanged}
-                        value={values[field.name]}
-                      />
-                    </div>
-                  );
-                default:
-                  return (
-                    <div
-                      key={xds}
-                      className="col-md-12 animate-box fadeInDown animated"
-                    >
-                      <Field
-                        field={field}
-                        className="form-control col-md-12"
-                        fieldChanged={fieldChanged}
-                        value={values[field.name]}
-                      />
-                    </div>
-                  );
+              case "field_group":
+                return (
+                  <div key={xds} className="col-md-12  fadeInDown animated">
+                    <FieldGroup
+                      field={field}
+                      className="form-control col-md-12"
+                      fieldChanged={fieldChanged}
+                      values={values}
+                      type={field.type}
+                    />
+                  </div>
+                );
+              case "options":
+                return (
+                  <div key={xds} className="col-md-12  ">
+                    <Option
+                      selected={values[field.name]}
+                      field={field}
+                      className="form-control col-md-12"
+                      fieldChanged={fieldChanged}
+                      value={values[field.name]}
+                      type={field.type}
+                    />
+                  </div>
+                );
+              case "list":
+                return (
+                  <div key={xds} className="col-md-12  ">
+                    <List
+                      field={field}
+                      className="form-control col-md-12"
+                      fieldChanged={fieldChanged}
+                      value={values[field.name]}
+                      type={field.type}
+                    />
+                  </div>
+                );
+              default:
+                return (
+                  <div key={xds} className="col-md-12  fadeInDown animated">
+                    <Field
+                      field={field}
+                      className="form-control col-md-12"
+                      fieldChanged={fieldChanged}
+                      value={values[field.name]}
+                      type={field.type}
+                    />
+                  </div>
+                );
               }
             })
         )}
@@ -209,3 +216,12 @@ export default function Form(props) {
     </div>
   );
 }
+
+Form.PropTypes = {
+  formData: PropTypes.any.isRequired,
+  thisAction: PropTypes.any.isRequired,
+  field: PropTypes.any,
+  fieldChanged: PropTypes.any,
+  type: PropTypes.any,
+  value: PropTypes.any,
+};

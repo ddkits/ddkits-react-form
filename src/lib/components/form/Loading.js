@@ -1,14 +1,18 @@
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import PropTypes from "prop-types";
+
 /**
  * Loading
- * @param {props} props 
- * @returns 
+ * @param {props} props
+ * @returns
  */
 export default function Loading(props) {
-  const width = props.width || "100%";
+  const { width } = props;
+  const widthCl = width || "100%";
+  const sx = `width: ${widthCl}`;
   return (
-    <div sx={{ width: width }}>
+    <div {...sx}>
       <ClipLoader
         color={"#CF1717"}
         size={150}
@@ -18,3 +22,7 @@ export default function Loading(props) {
     </div>
   );
 }
+
+Loading.PropTypes = {
+  width: PropTypes.string,
+};

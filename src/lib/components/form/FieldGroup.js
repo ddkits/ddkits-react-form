@@ -1,14 +1,9 @@
 import React from "react";
 import Field from "./Field";
+import PropTypes from "prop-types";
 
-/**
- * FieldGroup
- * @param {object} field
- * @param {function} fieldChanged
- * @param {string} value 
- * @returns 
- */
-const FieldGroup = ({ field, fieldChanged, values }) => {
+export default function FieldGroup(props) {
+  const { field, fieldChanged, values } = props;
   const fields = field.fields;
 
   return (
@@ -18,6 +13,7 @@ const FieldGroup = ({ field, fieldChanged, values }) => {
         return (
           <Field
             key={field.name}
+            type={field.type}
             field={field}
             fieldChanged={fieldChanged}
             value={values[field.name]}
@@ -26,6 +22,10 @@ const FieldGroup = ({ field, fieldChanged, values }) => {
       })}
     </fieldset>
   );
-};
+}
 
-export default FieldGroup;
+FieldGroup.PropTypes = {
+  field: PropTypes.array,
+  fieldChanged: PropTypes.any,
+  values: PropTypes.any,
+};
