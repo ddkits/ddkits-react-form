@@ -3,24 +3,18 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = FieldGroup;
 require("core-js/modules/web.dom-collections.iterator.js");
 var _react = _interopRequireDefault(require("react"));
 var _Field = _interopRequireDefault(require("./Field"));
+var _propTypes = _interopRequireDefault(require("prop-types"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-/**
- * FieldGroup
- * @param {object} field
- * @param {function} fieldChanged
- * @param {string} value 
- * @returns 
- */
-const FieldGroup = _ref => {
-  let {
+function FieldGroup(props) {
+  const {
     field,
     fieldChanged,
     values
-  } = _ref;
+  } = props;
   const fields = field.fields;
   return /*#__PURE__*/_react.default.createElement("fieldset", {
     key: field.name,
@@ -30,11 +24,15 @@ const FieldGroup = _ref => {
   }, field.label), fields.map(field => {
     return /*#__PURE__*/_react.default.createElement(_Field.default, {
       key: field.name,
+      type: field.type,
       field: field,
       fieldChanged: fieldChanged,
       value: values[field.name]
     });
   }));
+}
+FieldGroup.PropTypes = {
+  field: _propTypes.default.array,
+  fieldChanged: _propTypes.default.any,
+  values: _propTypes.default.any
 };
-var _default = FieldGroup;
-exports.default = _default;

@@ -13,6 +13,8 @@ var _FieldGroup = _interopRequireDefault(require("./FieldGroup"));
 var _Field = _interopRequireDefault(require("./Field"));
 var _Option = _interopRequireDefault(require("./Option"));
 var _Loading = _interopRequireDefault(require("./Loading"));
+var _propTypes = _interopRequireDefault(require("prop-types"));
+var _List = _interopRequireDefault(require("./List"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -67,9 +69,7 @@ function Form(props) {
         }
         return obj;
       }, {});
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      setLoading(false);
       return Object.assign({}, newValues, currentValues);
     });
   }, [page, formData]);
@@ -119,7 +119,6 @@ function Form(props) {
       return page;
     };
     await validateFields().then(x => {
-      console.log(x);
       if (x.length > 0) {
         setError(true);
         setmessage(x.join("<br/>"));
@@ -127,7 +126,11 @@ function Form(props) {
       } else {
         setError(false);
         setmessage("");
+        setLoading(true);
         setPage(findNextPage(direction === "next" ? page + 1 : page - 1));
+        setTimeout(() => {
+          setLoading(false);
+        }, 100);
       }
     });
   };
@@ -141,46 +144,63 @@ function Form(props) {
     e.preventDefault();
   };
   return /*#__PURE__*/_react.default.createElement("div", {
-    className: "col-md-12 services animate-box fadeInDown animated"
+    className: "col-md-12 services  fadeInDown animated"
   }, message !== "" && /*#__PURE__*/_react.default.createElement("div", {
-    className: "alert alert-danger alert-dismissible dismissible animate-box fadeInDown animated",
+    className: "alert alert-danger alert-dismissible dismissible  fadeInDown animated",
     dangerouslySetInnerHTML: {
       __html: message
     }
   }), /*#__PURE__*/_react.default.createElement("form", {
     className: "form-group col-md-12",
     onSubmit: onSubmitForm
-  }, /*#__PURE__*/_react.default.createElement("h3", null, currentPageData.label), loading ? /*#__PURE__*/_react.default.createElement(_Loading.default, null) : currentPageData.fields.filter(fieldMeetsCondition(values)).map((field, xds) => {
+  }, /*#__PURE__*/_react.default.createElement("h3", null, currentPageData.label), loading ? /*#__PURE__*/_react.default.createElement(_Loading.default, {
+    width: "100%"
+  }) : currentPageData.fields.filter(fieldMeetsCondition(values)).map((field, xds) => {
     switch (field.component) {
       case "field_group":
         return /*#__PURE__*/_react.default.createElement("div", {
           key: xds,
-          className: "col-md-12 animate-box fadeInDown animated"
+          className: "col-md-12  fadeInDown animated"
         }, /*#__PURE__*/_react.default.createElement(_FieldGroup.default, {
           field: field,
           className: "form-control col-md-12",
           fieldChanged: fieldChanged,
-          values: values
+          values: values,
+          type: field.type
         }));
       case "options":
         return /*#__PURE__*/_react.default.createElement("div", {
           key: xds,
-          className: "col-md-12 animate-box fadeInDown animated"
+          className: "col-md-12  "
         }, /*#__PURE__*/_react.default.createElement(_Option.default, {
+          selected: values[field.name],
           field: field,
           className: "form-control col-md-12",
           fieldChanged: fieldChanged,
-          value: values[field.name]
+          value: values[field.name],
+          type: field.type
+        }));
+      case "list":
+        return /*#__PURE__*/_react.default.createElement("div", {
+          key: xds,
+          className: "col-md-12  "
+        }, /*#__PURE__*/_react.default.createElement(_List.default, {
+          field: field,
+          className: "form-control col-md-12",
+          fieldChanged: fieldChanged,
+          value: values[field.name],
+          type: field.type
         }));
       default:
         return /*#__PURE__*/_react.default.createElement("div", {
           key: xds,
-          className: "col-md-12 animate-box fadeInDown animated"
+          className: "col-md-12  fadeInDown animated"
         }, /*#__PURE__*/_react.default.createElement(_Field.default, {
           field: field,
           className: "form-control col-md-12",
           fieldChanged: fieldChanged,
-          value: values[field.name]
+          value: values[field.name],
+          type: field.type
         }));
     }
   }), page > 0 && /*#__PURE__*/_react.default.createElement("button", {
@@ -191,3 +211,11 @@ function Form(props) {
     onClick: () => onSubmit(values)
   }, props.btntext ? props.btntext : "Submit")));
 }
+Form.PropTypes = {
+  formData: _propTypes.default.any.isRequired,
+  thisAction: _propTypes.default.any.isRequired,
+  field: _propTypes.default.any,
+  fieldChanged: _propTypes.default.any,
+  type: _propTypes.default.any,
+  value: _propTypes.default.any
+};
