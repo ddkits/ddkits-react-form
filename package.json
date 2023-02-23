@@ -3,8 +3,11 @@
   "version": "0.1.17",
   "author": "Sam Ayoub <sam@ddkits.com>",
   "license": "MIT",
-  "description": "DDKits React Form, powered by www.reallexi.com, is a custom fully component to build a dynamic fully functional form, with required, pagination and fields validation, all in one. Easy use by JSON or an object to pass. free of bugs.",
+  "description": "DDKits React dynamic form, powered by www.reallexi.com, is a custom fully component to build a dynamic fully functional form, with required, pagination and fields validation, all in one. Easy use by JSON or an object to pass. free of bugs.",
   "keywords": [
+    "ddkits",
+    "reallexi",
+    "dynamic",
     "react",
     "components",
     "ui",
@@ -13,7 +16,10 @@
     "dynamic",
     "pages",
     "submission",
-    "free"
+    "free",
+    "input",
+    "validation",
+    "loading"
   ],
   "private": false,
   "main": "dist/index.js",
@@ -72,12 +78,12 @@
   "peerDependencies": {
     "core-js": "*",
     "react": "*",
-    "react-dom": "*"
-  },
-  "dependencies": {
-    "@ckeditor/ckeditor5-react": "^5.0.6",
+    "react-dom": "*",
     "@remix-run/router": "^1.3.2",
     "prop-types": "^15.8.1",
+    "@ckeditor/ckeditor5-react": "^5.0.6"
+  },
+  "dependencies": {
     "react-select": "^5.7.0",
     "react-spinners": "^0.13.7"
   }
