@@ -1,5 +1,4 @@
 import React from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 import PropTypes from "prop-types";
 
 /**
@@ -11,16 +10,7 @@ export default function Loading(props) {
   const { width } = props;
   const widthCl = width || "100%";
   const sx = `width: ${widthCl}`;
-  return (
-    <div {...sx}>
-      <ClipLoader
-        color={"#CF1717"}
-        size={150}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-    </div>
-  );
+  return <div {...sx}>Loading...</div>;
 }
 
 Loading.PropTypes = {

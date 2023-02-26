@@ -8,6 +8,8 @@ Nice spinner between pages in loading
 ![DDKits Form Example 2](/assets/images/image2.png)
 ![DDKits Form Example 3](/assets/images/image3.png)
 
+# Funding
+https://opencollective.com/reallexi 
 
 
 ## Get started
